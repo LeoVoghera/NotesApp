@@ -1,0 +1,1 @@
+A simple notes app to learn react + node.js backend + frontent and RESTful API.
