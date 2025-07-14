@@ -12,6 +12,21 @@ export default function App() {
       .catch(console.error);
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/notes/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) throw new Error('Failed to delete note');
+
+      setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert('Error deleting note');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newNoteTitle.trim() || !newNote.trim()) return;
@@ -34,7 +49,7 @@ export default function App() {
       alert("Error adding note");
     }
   };
-  
+
 
   return (
     <div style={{
@@ -112,9 +127,26 @@ export default function App() {
             <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 6 }}>
               {note.title}
             </div>
-            <div style={{ fontSize: '1rem', color: '#ccc', whiteSpace: 'pre-wrap' }}>
+            <div style={{ fontSize: '1rem', color: '#ccc', whiteSpace: 'pre-wrap', marginBottom: '10px' }}>
               {note.content}
             </div>
+            <button
+              onClick={() => handleDelete(note.id)}
+              style={{
+                padding: '8px 12px',
+                fontSize: '0.9rem',
+                backgroundColor: '#ff4444',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 4,
+                cursor: 'pointer',
+                transition: 'background-color 0.2s'
+              }}
+              onMouseOver={e => (e.target.style.backgroundColor = '#ff6666')}
+              onMouseOut={e => (e.target.style.backgroundColor = '#ff4444')}
+            >
+              🗑️ Delete
+            </button>
           </li>
         ))}
       </ul>

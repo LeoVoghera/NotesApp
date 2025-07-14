@@ -29,7 +29,22 @@ router.post('/', (req, res) => {
 
   notes.push(newNote);
   res.status(201).json(newNote);
-  console.log('✅ Added note:', newNote);
+  console.log('Created new note:', newNote.id);
+});
+
+// DELETE a note
+router.delete('/:id', (req, res) => {
+  const noteId = parseInt(req.params.id);
+  const initialLength = notes.length;
+  
+  notes = notes.filter(note => note.id !== noteId);
+  
+  if (notes.length === initialLength) {
+    return res.status(404).json({ error: 'Note not found' });
+  }
+  
+  res.status(200).json({ message: 'Note deleted successfully' });
+  console.log('Deleted note:', noteId);
 });
 
 module.exports = router;
